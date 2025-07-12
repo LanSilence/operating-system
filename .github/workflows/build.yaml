@@ -3,7 +3,9 @@ name: build
 on:
   push:
     branches: [ "rk3399" ]
-
+env:
+  GIT_TERMINAL_PROMPT: 0  # 禁用终端提示
+  GIT_SUBMODULE_STRATEGY: recursive  # 强制递归初始化子模块
 jobs:
   build:
 
@@ -17,7 +19,7 @@ jobs:
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
-      
+    
     - name: build RK3399-custom
       run: |
         scripts/enter.sh make -j12 rk3399_custom
