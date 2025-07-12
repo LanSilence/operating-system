@@ -11,7 +11,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build the site in the jekyll/builder container
+      with:
+          fetch-depth: 0
+          submodules: true
+
+    - name: build RK3399-custom
       run: |
         scripts/enter.sh make -j12 rk3399_custom
 
