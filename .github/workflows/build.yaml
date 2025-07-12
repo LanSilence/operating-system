@@ -21,6 +21,7 @@ jobs:
       uses: docker/setup-buildx-action@v2
     
     - name: build RK3399-custom
+      shell: 'script -q -e -c "bash {0}"'
       run: |
         scripts/enter.sh make -j12 rk3399_custom
 
