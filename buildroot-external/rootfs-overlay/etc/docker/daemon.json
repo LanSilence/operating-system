@@ -6,6 +6,9 @@
     "log-opts": {
         "tag": "{{.Name}}"
     },
+    "registry-mirrors": [
+        "https://docker.xuanyuan.me"
+    ],
     "data-root": "/mnt/data/docker",
     "deprecated-key-path": "/mnt/overlay/etc/docker/key.json",
     "bip": "172.30.232.1/23"

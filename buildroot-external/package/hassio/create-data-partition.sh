@@ -1,11 +1,21 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 
 build_dir=$1
 dst_dir=$2
 channel=$3
 
 data_img="${dst_dir}/data.ext4"
+
+container=""
+cleanup() {
+    if [ -n "${container}" ]; then
+        sudo docker stop "${container}" >/dev/null 2>&1 || true
+        sudo docker rm "${container}" >/dev/null 2>&1 || true
+    fi
+    sudo umount -l "${build_dir}/data/" 2>/dev/null || true
+}
+trap cleanup EXIT
 
 # Make image
 rm -f "${data_img}"
@@ -19,15 +29,18 @@ sudo mount -o loop,discard "${data_img}" "${build_dir}/data/"
 # Use official Docker in Docker images
 # Ideally we use the same version as Buildroot is using in case the
 # overlayfs2 storage format changes
-container=$(docker run --privileged -e DOCKER_TLS_CERTDIR="" \
+container=$(sudo docker run --privileged -e DOCKER_TLS_CERTDIR="" \
 	-v "${build_dir}/data/":/data \
 	-v "${build_dir}/data/docker/":/var/lib/docker \
 	-v "${build_dir}":/build \
 	-d docker:28.0-dind --storage-driver overlay2)
+echo ${container}
+until sudo docker exec "${container}" docker info >/dev/null 2>&1; do
+    echo "Waiting for Docker daemon..."
+    sleep 1
+done
+sudo docker exec "${container}" sh /build/dind-import-containers.sh "${channel}"
 
-docker exec "${container}" sh /build/dind-import-containers.sh "${channel}"
-
-docker stop "${container}"
-
+sudo docker stop "${container}"
 # Unmount data image
 sudo umount "${build_dir}/data/"

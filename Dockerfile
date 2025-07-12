@@ -11,17 +11,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         gpg-agent \
         gpg \
         dirmngr \
-        software-properties-common \
-    && curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/docker.gpg \
+        software-properties-common \    
+        && curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/debian/gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/docker.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/trusted.gpg.d/docker.gpg] \
-        https://download.docker.com/linux/debian $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list \
+        https://mirrors.aliyun.com/docker-ce/linux/debian $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list \
     && apt-get update && apt-get install -y --no-install-recommends \
         docker-ce \
     && rm -rf /var/lib/apt/lists/*
 
 # Build tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        automake \
+	automake \
         bash \
         bc \
         binutils \
@@ -31,14 +31,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         file \
         git \
         graphviz \
-        help2man \
+	help2man \
         jq \
         make \
         ncurses-dev \
         openssh-client \
         patch \
         perl \
-        pigz \
         python3 \
         python3-matplotlib \
         python-is-python3 \
@@ -46,7 +45,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         rsync \
         skopeo \
         sudo \
-        texinfo \
+	texinfo \
         unzip \
         vim \
         wget \
