@@ -9,8 +9,10 @@ function hassos_pre_image() {
 
     cp "${BOARD_DIR}/boot-env.txt" "${BOOT_DATA}/haos-config.txt"
     cp "${BOARD_DIR}/cmdline.txt" "${BOOT_DATA}/cmdline.txt"
+    cp ${BOARD_DIR}/rkbin/idbloader.img ${BINARIES_DIR}/
+    cp ${BOARD_DIR}/rkbin/trust.img ${BINARIES_DIR}/
     mkimage -C none -A arm -T script -d ${BOARD_DIR}/uboot-boot.ush ${BOOT_DATA}/boot.scr  
-    dd if=${BOOT_DATA}/../idbloader.img of=${BOOT_DATA}/u-boot-rockchip.bin seek=64
+    ${BOARD_DIR}/rkbin/loaderimage --pack --uboot ${BINARIES_DIR}/u-boot.bin ${BINARIES_DIR}/u-boot.img 0x200000
 }
 
 
