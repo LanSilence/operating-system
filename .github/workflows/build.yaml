@@ -19,7 +19,30 @@ jobs:
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
-    
+
+    - name: Initialization environment and Free up disk space
+      run: |
+        sudo timedatectl set-timezone "Asia/Shanghai"
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /opt/ghc
+        sudo rm -rf /var/lib/apt/lists/*
+        sudo rm -rf /var/cache/apt/archives/*
+        sudo rm -rf /var/cache/debconf/*-old
+        sudo rm -rf /opt/hostedtoolcache/CodeQL
+        sudo apt clean
+        sudo rm -rf /etc/apt/sources.list.d/*
+        sudo apt-get -qq update -y
+        sudo apt-get -qq autoremove --purge -y
+        sudo apt-get -qq clean -y
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        #sudo rm -rf /usr/share/
+        df -h
+    - name: Write key to file
+      run: |
+        echo "${{ secrets.MID_KEY_PEM }}" > ./key.pem
+        echo "${{ secrets.MID_CERT_PEM }}" > ./cert.pem
+
     - name: build RK3399-custom
       shell: 'script -q -e -c "bash {0}"'
       run: |
