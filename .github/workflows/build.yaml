@@ -47,6 +47,10 @@ jobs:
       shell: 'script -q -e -c "bash {0}"'
       run: |
         scripts/enter.sh make -j12 rk3399_custom
+    - name: build RK3399-custom
+      shell: 'script -q -e -c "bash {0}"'
+      run: |
+        scripts/enter.sh make -j12 k2b_h618
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4

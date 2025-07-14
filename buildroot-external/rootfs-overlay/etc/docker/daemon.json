@@ -7,7 +7,7 @@
         "tag": "{{.Name}}"
     },
     "registry-mirrors": [
-        "https://docker.xuanyuan.me"
+        "https://docker.1ms.run"
     ],
     "data-root": "/mnt/data/docker",
     "deprecated-key-path": "/mnt/overlay/etc/docker/key.json",
