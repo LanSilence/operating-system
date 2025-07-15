@@ -50,7 +50,18 @@ jobs:
     - name: build RK3399-custom
       shell: 'script -q -e -c "bash {0}"'
       run: |
-        scripts/enter.sh make -j12 k2b_h618
+          sleep $((RANDOM % 600))    
+          max_retries=3
+          count=0
+          until scripts/enter.sh make -j$(($(nproc) + 1)) ; do
+            count=$((count + 1))
+            if [ $count -ge $max_retries ]; then
+              echo "Build failed after $count attempts."
+              exit 1
+            fi
+            echo "Build failed. Retrying in 30s... (Attempt $count/$max_retries)"
+            sleep 30
+          done
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
